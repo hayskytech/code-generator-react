@@ -18,7 +18,7 @@ export default function Textform() {
 		setText(event.target.value)
 	}
 	return (
-		<div className="ym-6">
+		<div className="container ym-6">
 			<h1>TextUtlis</h1>
 			<div className="mb-3">
 				<label htmlFor="exampleFormControlTextarea1" className="form-label">Example textarea</label>
