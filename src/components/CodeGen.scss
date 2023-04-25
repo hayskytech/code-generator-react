@@ -38,7 +38,18 @@ hr{
 }
 #main-form{
 	width: 100%;
-	input,select{
+	input{
 		width: 100%;
+	}
+	input{
+		width: 85%;
+	}
+}
+.removeIcon{
+	cursor: pointer;
+	:hover{
+		color: red;
+		background-color: skyblue;
+		border-radius: 20px;
 	}
 }
