@@ -53,3 +53,16 @@ hr{
 		border-radius: 20px;
 	}
 }
+@media(max-width:991px){
+	.lhs,.rhs{
+		width: 100%;
+	}
+	#main-form select {
+		width: 70px;
+	}
+}
+@media(min-width:768px){
+	#main-form select {
+		width: 100%;
+	}
+}
