@@ -1,38 +1,54 @@
-
 import './CodeGen.scss'
 import React from 'react'
 import { v4 as uuidv4 } from 'uuid';
-export default function CodeGen() {
+import { HtmlInput, HtmlSelect, HtmlRadio, FormatHtml } from './Html';
+import Cpt from '../wordpress/Cpt';
+import { Large, Small } from './ChangeCase';
+import { CustomTaxonomy } from '../wordpress/CustomTaxonomy';
 
-	var [list, setList] = React.useState([{ id: 1, type: "text", ans: "first_name", index: 0 }]);
+
+const td_hide = ['submit', 'checkbox', 'hidden', 'button', 'reset']
+const dropdown = ['select', 'radio']
+export default function CodeGen(props) {
+
+	var [list, setList] = React.useState([{ key: 1, type: "text", ans: "first_name", index: 0 }]);
 	const [htmlCode, setHtmlCode] = React.useState('');
-	const td_hide = ['submit', 'checkbox', 'hidden', 'button', 'reset']
-	const show_val = ['submit', 'hidden', 'button', 'reset']
-	const show_beside = ['checkbox']
 
 	const handleAdd = () => {
 		var l = 0
 		if (list.length > 0) {
 			l = list[list.length - 1].index + 1
 		}
-		const newList = list.concat({ id: uuidv4(), ans: "field_name", type: "text", index: l });
+		const newList = list.concat({ key: uuidv4(), ans: "", type: "text", index: l });
 		setList(newList);
 		updateCode()
+		setTimeout(() => {
+			const table = document.getElementById("main-form");
+			const lastInput = table.rows[table.rows.length - 1].cells[1].childNodes[0];
+			lastInput.value = ''
+			lastInput.focus();
+		}, 200);
 	}
 	const updateCode = () => {
 		setTimeout(() => {
 			const targetElem = document.getElementById('out');
 			if (targetElem) {
-				setHtmlCode(format_html(targetElem.innerHTML));
+				setHtmlCode(FormatHtml(targetElem.innerHTML));
 			}
 		}, 200);
+	}
+	function handleKeyPress(event) {
+		if (event.key === 'Enter') {
+			event.preventDefault();
+			handleAdd()
+		}
 	}
 	const handleInputChange = (event) => {
 		const x = event.target.id
 		var newList = JSON.parse(JSON.stringify(list))
 		var i = 0;
 		while (i < newList.length) {
-			if (newList[i].index == x) {
+			if (newList[i].index === parseInt(x)) {
 				newList[i].ans = event.target.value;
 			}
 			++i;
@@ -46,40 +62,21 @@ export default function CodeGen() {
 		var newList = JSON.parse(JSON.stringify(list))
 		var i = 0;
 		while (i < newList.length) {
-			if (newList[i].index == x) {
+			if (newList[i].index === parseInt(x)) {
 				newList[i].type = event.target.value;
 			}
+			console.log(newList[i])
 			++i;
 		}
 		setList(newList)
 		updateCode()
-	}
-	function small(x) {
-		x = x.replaceAll(" ", "_");
-		x = x.toLowerCase()
-		return x
-	}
-	function format_html(html) {
-		var tab = '\t';
-		var result = '';
-		var indent = '';
-		html.split(/>\s*</).forEach(function (element) {
-			if (element.match(/^\/\w/)) {
-				indent = indent.substring(tab.length);
-			}
-			result += indent + '<' + element + '>\r\n';
-			if (element.match(/^<?\w[^>]*[^\/]$/) && !element.startsWith("input")) {
-				indent += tab;
-			}
-		});
-		return result.substring(1, result.length - 1);
 	}
 	function removeRow(event) {
 		const a = event.target.id
 		var newList = JSON.parse(JSON.stringify(list))
 		var i = 0;
 		while (i < newList.length) {
-			if (newList[i].index == a) {
+			if (newList[i].index === parseInt(a)) {
 				newList.splice(i, 1);
 			} else {
 				++i;
@@ -97,7 +94,7 @@ export default function CodeGen() {
 					<table id="main-form">
 						<tbody>
 							{list.map((item) => (
-								<tr key={item.id}>
+								<tr key={item.key}>
 									<td>
 										<select onChange={handleTypeChange} value={item.type} id={item.index}>
 											<option value="text">text</option>
@@ -113,8 +110,8 @@ export default function CodeGen() {
 											<option value="checkbox">checkbox</option>
 											<option value="color">color</option>
 											<option value="hidden">hidden</option>
-											{/* <option value="radio">radio</option> */}
-											{/* <option value="image">image</option> */}
+											<option value="select">select</option>
+											<option value="radio">radio</option>
 											<option value="month">month</option>
 											<option value="reset">reset</option>
 											<option value="search">search</option>
@@ -125,7 +122,10 @@ export default function CodeGen() {
 										</select>
 									</td>
 									<td>
-										<input id={item.index} type="text" value={item.ans} onChange={handleInputChange} />
+										<input id={item.index} type="text" value={item.ans}
+											onChange={handleInputChange}
+											onKeyDown={handleKeyPress}
+										/>
 										<span className='removeIcon'>
 											<svg
 												id={item.index}
@@ -142,21 +142,19 @@ export default function CodeGen() {
 					</table>
 				</div>
 			</div>
-			<div className="rhs">
+			{props.page === 'HTML Form' && <div className="rhs">
 				<h3>Preview</h3>
 				<div id="out">
 					<form>
 						<table>
 							<tbody>
 								{list.map((item) => (
-									<tr key={item.id}>
-										<td>{td_hide.includes(item.type) ? '' : item.ans}</td>
+									<tr key={item.key}>
+										<td>{td_hide.includes(item.type) ? '' : Large(item.ans.split(',')[0])}</td>
 										<td>
-											<input type={item.type}
-												name={small(item.ans)}
-												value={show_val.includes(item.type) ? item.ans : ''}
-												onChange={() => { }} />
-											{show_beside.includes(item.type) ? item.ans : ''}
+											{!dropdown.includes(item.type) && <HtmlInput item={item} />}
+											{item.type === 'select' && <HtmlSelect item={item} />}
+											{item.type === 'radio' && <HtmlRadio item={item} />}
 										</td>
 									</tr>
 								))}
@@ -164,14 +162,23 @@ export default function CodeGen() {
 						</table>
 					</form>
 				</div>
-			</div>
+			</div>}
 			<hr />
 
-			{Boolean(list.length) && (
+			{Boolean(list.length) && props.page === 'HTML Form' && (
 				<>
-					<pre id='code'>{htmlCode.substring(0, htmlCode.length - 2)}</pre>
+					<pre>{htmlCode.substring(0, htmlCode.length - 2)}</pre>
 				</>
 			)}
+
+			{Boolean(list.length) && props.page === 'CPT' && (
+				<pre>
+					{list.map((item) => (<Cpt key={item.key} item={item} />))}
+				</pre>
+			)}
+			{Boolean(list.length) && props.page === 'Custom Taxonomy' && <pre>
+				{list.map((item) => (<CustomTaxonomy key={item.key} item={item} />))}
+			</pre>}
 		</div>
 	)
 }

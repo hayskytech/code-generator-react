@@ -2,11 +2,11 @@
 	font-size: 16px;
 }
 .lhs{
-	width: 30%;
+	width: 50%;
 	float: left;
 }
 .rhs{
-	width: 70%;
+	width: 50%;
 	float: left;
 }
 h2{
@@ -28,7 +28,7 @@ hr{
 	border: 2px solid;
 	padding: 10px;
 }
-#code{
+pre{
 	tab-size: 2;
 	background: lightgray;
 /*	border: 2px solid;*/
@@ -36,8 +36,14 @@ hr{
 	border-radius: 20px;
 	white-space: pre-wrap;
 }
+.nav-item{
+	cursor: pointer;
+}
 #main-form{
 	width: 100%;
+	td:first-child{
+		width: 150px;
+	}
 	input{
 		width: 100%;
 	}
