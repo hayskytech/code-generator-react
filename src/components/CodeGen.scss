@@ -42,7 +42,7 @@ pre{
 #main-form{
 	width: 100%;
 	td:first-child{
-		width: 150px;
+		width: 100px;
 	}
 	input{
 		width: 100%;
@@ -60,7 +60,7 @@ pre{
 	}
 }
 @media(max-width:991px){
-	.lhs,.rhs{
+	.lhs,.rhs,#sticky-sidebar,#main{
 		width: 100%;
 	}
 	#main-form select {
