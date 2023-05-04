@@ -1,5 +1,5 @@
 import React from 'react'
-import { Large, Small } from './ChangeCase'
+import { Small } from './ChangeCase'
 import { v4 as uuidv4 } from 'uuid';
 const show_val = ['submit', 'hidden', 'button', 'reset']
 const show_beside = ['checkbox']
@@ -8,10 +8,10 @@ export function HtmlInput(props) {
 	return (
 		<>
 			<input type={props.item.type}
-				name={Small(props.item.ans)}
-				value={show_val.includes(props.item.type) ? Large(props.item.ans) : ''}
+				name={props.item.slug}
+				value={show_val.includes(props.item.type) ? props.item.name : ''}
 				onChange={() => { }} />
-			{show_beside.includes(props.item.type) ? props.item.ans : ''}
+			{show_beside.includes(props.item.type) ? ' ' + props.item.name : ''}
 		</>
 	)
 }

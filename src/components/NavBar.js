@@ -11,7 +11,7 @@ export default function NavBar(props) {
 		element.classList.add("active")
 		props.change(element.innerHTML)
 	}
-	const menuItems = ['HTML Form', 'Custom Post Type', 'Custom Taxonomy', 'Rest API']
+	const menuItems = ['HTML Form', 'Custom Post Type', 'Custom Taxonomy', 'Rest API', 'Admin Menu']
 	return (
 		<main>
 			<nav className="navbar navbar-expand-lg bg-body-tertiary">

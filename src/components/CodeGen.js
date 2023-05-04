@@ -3,16 +3,25 @@ import React from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import { HtmlInput, HtmlSelect, HtmlRadio, FormatHtml } from './Html';
 import Cpt from '../wordpress/CustomPostType';
-import { Large } from './ChangeCase';
+import { Large, Small } from './ChangeCase';
 import { CustomTaxonomy } from '../wordpress/CustomTaxonomy';
 import HtmlInputs from './HtmlInputs';
 import RestApi from '../wordpress/RestApi';
+import AdminMenu from '../wordpress/AdminMenu';
 
 const td_hide = ['submit', 'checkbox', 'hidden', 'button', 'reset']
 const dropdown = ['select', 'radio']
 export default function CodeGen(props) {
 
-	var [list, setList] = React.useState([{ key: 1, type: "text", ans: "first_name", index: 0 }]);
+	var [list, setList] = React.useState([
+		{
+			key: 1,
+			type: "text",
+			ans: "first_name",
+			name: 'First Name',
+			slug: 'first_name',
+			index: 0
+		}]);
 	const [htmlCode, setHtmlCode] = React.useState('');
 
 	const handleAdd = () => {
@@ -51,6 +60,8 @@ export default function CodeGen(props) {
 		while (i < newList.length) {
 			if (newList[i].index === parseInt(x)) {
 				newList[i].ans = event.target.value;
+				newList[i].name = Large(event.target.value);
+				newList[i].slug = Small(event.target.value);
 			}
 			++i;
 		}
@@ -137,7 +148,7 @@ export default function CodeGen(props) {
 									<tbody>
 										{list.map((item) => (
 											<tr key={item.key}>
-												<td>{td_hide.includes(item.type) ? '' : Large(item.ans.split(',')[0])}</td>
+												<td>{td_hide.includes(item.type) ? '' : item.name}</td>
 												<td>
 													{!dropdown.includes(item.type) && <HtmlInput item={item} />}
 													{item.type === 'select' && <HtmlSelect item={item} />}
@@ -168,8 +179,15 @@ export default function CodeGen(props) {
 						<div>
 							<pre>{`<?php`}
 								{list.map((item) => (<RestApi key={item.key} item={item} />))}
-							{`?>`}</pre>
+								{`?>`}</pre>
 							<p>Note: After adding this code, please save permalinks once...</p>
+						</div>}
+
+					{Boolean(list.length) && props.page === 'Admin Menu' &&
+						<div>
+							<pre>{`<?php`}
+								{list.map((item) => (<AdminMenu key={item.key} item={item} />))}
+								{`?>`}</pre>
 						</div>}
 
 				</div>
