@@ -3,8 +3,10 @@ import React from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import { HtmlInput, HtmlSelect, HtmlRadio, FormatHtml } from './Html';
 import Cpt from '../wordpress/CustomPostType';
-import { Large, Small } from './ChangeCase';
+import { Large } from './ChangeCase';
 import { CustomTaxonomy } from '../wordpress/CustomTaxonomy';
+import HtmlInputs from './HtmlInputs';
+import RestApi from '../wordpress/RestApi';
 
 const td_hide = ['submit', 'checkbox', 'hidden', 'button', 'reset']
 const dropdown = ['select', 'radio']
@@ -99,27 +101,7 @@ export default function CodeGen(props) {
 												<td>
 													<select onChange={handleTypeChange} value={item.type} id={item.index}>
 														<option value="text">text</option>
-														<option value="date">date</option>
-														<option value="datetime-local">datetime-local</option>
-														<option value="email">email</option>
-														<option value="number">number</option>
-														<option value="range">range</option>
-														<option value="password">password</option>
-														<option value="submit">submit</option>
-														<option value="file">file</option>
-														<option value="button">button</option>
-														<option value="checkbox">checkbox</option>
-														<option value="color">color</option>
-														<option value="hidden">hidden</option>
-														<option value="select">select</option>
-														<option value="radio">radio</option>
-														<option value="month">month</option>
-														<option value="reset">reset</option>
-														<option value="search">search</option>
-														<option value="tel">tel</option>
-														<option value="time">time</option>
-														<option value="url">url</option>
-														<option value="week">week</option>
+														<HtmlInputs />
 													</select>
 												</td>
 												<td>
@@ -171,19 +153,25 @@ export default function CodeGen(props) {
 					<hr />
 
 					{Boolean(list.length) && props.page === 'HTML Form' && (
-						<>
-							<pre>{htmlCode.substring(0, htmlCode.length - 2)}</pre>
-						</>
+						<pre>{htmlCode.substring(0, htmlCode.length - 2)}</pre>
 					)}
 
 					{Boolean(list.length) && props.page === 'Custom Post Type' && (
-						<pre>
-							{list.map((item) => (<Cpt key={item.key} item={item} />))}
-						</pre>
+						<pre>{list.map((item) => (<Cpt key={item.key} item={item} />))}</pre>
 					)}
+
 					{Boolean(list.length) && props.page === 'Custom Taxonomy' && <pre>
 						{list.map((item) => (<CustomTaxonomy key={item.key} item={item} />))}
 					</pre>}
+
+					{Boolean(list.length) && props.page === 'Rest API' &&
+						<div>
+							<pre>{`<?php`}
+								{list.map((item) => (<RestApi key={item.key} item={item} />))}
+							{`?>`}</pre>
+							<p>Note: After adding this code, please save permalinks once...</p>
+						</div>}
+
 				</div>
 			</div>
 		</div>

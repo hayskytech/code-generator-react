@@ -11,6 +11,7 @@ export default function NavBar(props) {
 		element.classList.add("active")
 		props.change(element.innerHTML)
 	}
+	const menuItems = ['HTML Form', 'Custom Post Type', 'Custom Taxonomy', 'Rest API']
 	return (
 		<main>
 			<nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -30,15 +31,11 @@ export default function NavBar(props) {
 			<div className="container">
 				<header className="d-flex justify-content-center py-3 second_menu">
 					<ul className="nav nav-pills">
-						<li className="nav-item mx-1" onClick={change_page}>
-							<a className="nav-link item active">HTML Form</a>
-						</li>
-						<li className="nav-item mx-1" onClick={change_page}>
-							<a className="nav-link item">Custom Post Type</a>
-						</li>
-						<li className="nav-item mx-1" onClick={change_page}>
-							<a className="nav-link item">Custom Taxonomy</a>
-						</li>
+						{menuItems.map((item) => (
+							<li className="nav-item mx-1" onClick={change_page}>
+								<a className="nav-link item">{item}</a>
+							</li>
+						))}
 					</ul>
 				</header>
 			</div>
