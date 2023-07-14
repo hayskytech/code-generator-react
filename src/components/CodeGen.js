@@ -1,5 +1,5 @@
 import './CodeGen.scss'
-import React from 'react'
+import React, {useState} from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import { HtmlInput, HtmlSelect, HtmlRadio, FormatHtml } from './Html';
 import Cpt from '../wordpress/CustomPostType';
@@ -11,7 +11,20 @@ import AdminMenu from '../wordpress/AdminMenu';
 
 const td_hide = ['submit', 'checkbox', 'hidden', 'button', 'reset']
 const dropdown = ['select', 'radio']
-export default function CodeGen(props) {
+export default function CodeGen() {
+
+	function change_page(e) {
+		const element = e.target
+		document.querySelectorAll('.second_menu .item').forEach(b => {
+			b.classList.remove('active')
+		});
+		element.classList.add("active")
+		setPage(element.innerHTML)
+	}
+	const submenu = ['HTML Form', 'Custom Post Type', 'Custom Taxonomy', 'Rest API', 'Admin Menu']
+	const [page, setPage] = useState('HTML Form')
+
+	const [htmlCode, setHtmlCode] = React.useState('');
 
 	var [list, setList] = React.useState([
 		{
@@ -22,7 +35,6 @@ export default function CodeGen(props) {
 			slug: 'first_name',
 			index: 0
 		}]);
-	const [htmlCode, setHtmlCode] = React.useState('');
 
 	const handleAdd = () => {
 		var l = 0
@@ -99,9 +111,20 @@ export default function CodeGen(props) {
 	}
 	return (
 		<div className="container-xxl">
-			<div class="row py-3">
-				<div class="col-3" id="sticky-sidebar">
-					<div class="sticky-top">
+			<div className="row py-3">
+				<div className="container">
+					<header className="d-flex justify-content-center py-3 second_menu">
+						<ul className="nav nav-pills">
+							{submenu.map((item, index) => (
+								<li key={index} className="nav-item mx-1" onClick={change_page}>
+									<button className="nav-link item">{item}</button>
+								</li>
+							))}
+						</ul>
+					</header>
+				</div>
+				<div className="col-3" id="sticky-sidebar">
+					<div className="sticky-top">
 						<div className="lhs0">
 							<div className="content">
 								<button id="add-row" autoFocus onClick={handleAdd}>Add row</button>
@@ -116,10 +139,7 @@ export default function CodeGen(props) {
 													</select>
 												</td>
 												<td>
-													<input id={item.index} type="text" value={item.ans}
-														onChange={handleInputChange}
-														onKeyDown={handleKeyPress}
-													/>
+													<input id={item.index} type="text" value={item.ans} onChange={handleInputChange} onKeyDown={handleKeyPress} />
 													<span className='removeIcon'>
 														<svg
 															id={item.index}
@@ -138,9 +158,9 @@ export default function CodeGen(props) {
 						</div>
 					</div>
 				</div>
-				<div class="col-9 order-2" id="main">
+				<div className="col-9 order-2" id="main">
 
-					{props.page === 'HTML Form' && <div className="rhs">
+					{page === 'HTML Form' && <div className="rhs">
 						<h3>Preview</h3>
 						<div id="out">
 							<form>
@@ -163,19 +183,19 @@ export default function CodeGen(props) {
 					</div>}
 					<hr />
 
-					{Boolean(list.length) && props.page === 'HTML Form' && (
+					{Boolean(list.length) && page === 'HTML Form' && (
 						<pre>{htmlCode.substring(0, htmlCode.length - 2)}</pre>
 					)}
 
-					{Boolean(list.length) && props.page === 'Custom Post Type' && (
+					{Boolean(list.length) && page === 'Custom Post Type' && (
 						<pre>{list.map((item) => (<Cpt key={item.key} item={item} />))}</pre>
 					)}
 
-					{Boolean(list.length) && props.page === 'Custom Taxonomy' && <pre>
+					{Boolean(list.length) && page === 'Custom Taxonomy' && <pre>
 						{list.map((item) => (<CustomTaxonomy key={item.key} item={item} />))}
 					</pre>}
 
-					{Boolean(list.length) && props.page === 'Rest API' &&
+					{Boolean(list.length) && page === 'Rest API' &&
 						<div>
 							<pre>{`<?php`}
 								{list.map((item) => (<RestApi key={item.key} item={item} />))}
@@ -183,11 +203,12 @@ export default function CodeGen(props) {
 							<p>Note: After adding this code, please save permalinks once...</p>
 						</div>}
 
-					{Boolean(list.length) && props.page === 'Admin Menu' &&
+					{Boolean(list.length) && page === 'Admin Menu' &&
 						<div>
-							<pre>{`<?php`}
+							<pre>{`<?php
+add_action('admin_menu' , function(){`}
 								{list.map((item) => (<AdminMenu key={item.key} item={item} />))}
-								{`?>`}</pre>
+								{`});`}</pre>
 						</div>}
 
 				</div>

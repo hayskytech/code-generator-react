@@ -1,24 +1,21 @@
 import './App.css';
-import React, { useState } from 'react'
+import React from 'react'
 import Textform from './components/Textform';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import CodeGen from './components/CodeGen';
 import NavBar from './components/NavBar';
-import DynamicList from './components/DynamicList';
+import ReactGen from './react/ReactGen';
+import NotFoundPage from './components/NotFoundPage';
 function App() {
-	let [tool, setTool] = useState("HTML Form");
-	function handleState(value) {
-		setTool(value);
-	}
 	return (
 		<>
 			<BrowserRouter>
 				<Routes>
-					<Route path="/" element={<NavBar change={handleState} page={tool} />}>
-						<Route index element={<CodeGen page={tool} />} />
-						<Route path="dynamic_list" element={<DynamicList />} />
+					<Route path="" element={<NavBar />}>
+						<Route path='' element={<CodeGen />} />
+						<Route path="reactgen" element={<ReactGen />} />
 						<Route path="textutils" element={<Textform />} />
-						{/* <Route path="*" element={<NoPage />} /> */}
+						<Route path="*" element={<NotFoundPage />} />
 					</Route>
 				</Routes>
 			</BrowserRouter>

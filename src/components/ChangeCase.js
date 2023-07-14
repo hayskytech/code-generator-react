@@ -1,5 +1,3 @@
-import React from 'react'
-
 export function Small(x) {
 	x = x.replaceAll(" ", "_");
 	x = x.toLowerCase()
@@ -12,10 +10,11 @@ export function Large(x) {
 	x = x.replaceAll("_", ' ');
 	x = x.trim(x)
 	x = x.replaceAll(",", "");
-	const mySentence = x;
-	const words = mySentence.split(' ');
+	const words = x.split(' ');
 	for (let i = 0; i < words.length; i++) {
-		words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+		if (words[i][0]) {
+			words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+		}
 	}
 	x = words.join(' ');
 	return x;

@@ -1,8 +1,8 @@
 import React from 'react'
-import { Large, Small } from '../components/ChangeCase'
+import { Small } from '../components/ChangeCase'
 
 function RestApi(props) {
-	const name = Large(props.item.ans)
+	// const name = Large(props.item.ans)
 	const slug = Small(props.item.ans)
 	return (
 		<div>
