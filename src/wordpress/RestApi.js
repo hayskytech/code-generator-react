@@ -8,10 +8,10 @@ export default function RestAPI(p) {
 		<>
 			<h2>WordPress Rest API</h2>
 			<pre>{`<?php`}
-				{list.map((item) => {
+				{list.map((item, index) => {
 					const slug = Small(item.value)
 					return (
-						<>
+						<React.Fragment key={index}>
 							{`
 function rest_api_select_${slug}(WP_REST_Request $request){
 	// do something here
@@ -30,12 +30,12 @@ add_action('rest_api_init', function () {
 });
 // URL: https://yourwebsite.com/wp-json/my_api/v1/${slug}/
 `}
-						</>
+						</React.Fragment>
 					)
 				})}
 				{`?>`}
 			</pre>
-			<p>Not e: After adding this code, please save permalinks once...</p>
+			<p>Note: After adding this code, please save permalinks once...</p>
 
 		</>
 	)

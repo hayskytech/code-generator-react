@@ -8,10 +8,10 @@ function CustomPostType(p) {
 		<div>
 			<h2>WordPress Custom Post type</h2>
 			{(
-				<pre>{list.map((item) => {
+				<pre>{list.map((item, index) => {
 					const name = Large(item.value)
 					return (
-						<>
+						<React.Fragment key={index}>
 							{`<?php
 add_action( "init",function(){
     // Set labels for ${name}
@@ -42,7 +42,7 @@ add_action( "init",function(){
     
 });
 ?>`}
-						</>
+						</React.Fragment>
 					)
 				})
 				}</pre>

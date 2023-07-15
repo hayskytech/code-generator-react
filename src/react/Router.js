@@ -13,11 +13,11 @@ export default function Router(p) {
 	<Routes>
 		<Route path="" element={<NavBar/>}>`}
 				{list.map((item, index) => (
-					<>{
+					<React.Fragment key={index}>{
 						`
 			<Route path="${Small(item.value)}" element={<${Large(item.value?item.value:'home')}/>}>`}
 						{/* <p key={index}>{item.type ? item.type : 'text'} : {item.value}</p> */}
-					</>
+					</React.Fragment>
 				))}
 				{`
 			{/* <Route path="*" element={<NotFoundPage />} />	 */}

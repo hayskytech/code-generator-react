@@ -9,7 +9,7 @@ export default function AdminMenu(p) {
 			<h2>WordPress Admin Menu</h2>
 			<pre>{`<?php
 add_action('admin_menu' , function(){`}
-				{list.map((item) => {
+				{list.map((item, index) => {
 					const name = item.value
 					let arr = name.split(',')
 					const name1 = Small(arr[0])
@@ -24,14 +24,14 @@ add_action('admin_menu' , function(){`}
 						}
 					}
 					return (
-						<div>
+						<React.Fragment key={index}>
 							{Boolean(name) && `	add_menu_page('${name1}','${name1}','manage_options', '${name1}_admin', '${name1}_cox', 'dashicons-admin-users','2');
 	function ${name1}_cox(){ include '${name1}.php'; }
 	`}
 
 							{res}
 
-						</div>
+						</React.Fragment>
 					)
 				})}
 				{`});`}</pre>

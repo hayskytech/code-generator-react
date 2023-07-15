@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import HtmlInputs from '../components/HtmlInputs';
 
 export default function InputForm(p) {
 
@@ -48,12 +49,11 @@ export default function InputForm(p) {
 								<select name={item} onChange={handleTypeChange}
 									value={p.formData[item] ? p.formData[item].type : 'text'}>
 									<option value="text">text</option>
-									<option value="submenu">submenu</option>
+									<HtmlInputs/>
 								</select>
 							</td>
 							<td>
 								<input name={item} type="text"
-
 									value={p.formData[item] ? p.formData[item].value : ''}
 									placeholder='write here...'
 									onChange={handleInputChange} />
