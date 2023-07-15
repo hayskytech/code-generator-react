@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import CodeGen from './components/CodeGen';
 import NavBar from './components/NavBar';
 import ReactGen from './react/ReactGen';
+import WordPress from './wordpress/WordPress';
 import NotFoundPage from './components/NotFoundPage';
 function App() {
 	return (
@@ -12,8 +13,9 @@ function App() {
 			<BrowserRouter>
 				<Routes>
 					<Route path="" element={<NavBar />}>
-						<Route path='' element={<CodeGen />} />
+						<Route path='html' element={<CodeGen />} />
 						<Route path="reactgen" element={<ReactGen />} />
+						<Route path="" element={<WordPress/>} />
 						<Route path="textutils" element={<Textform />} />
 						<Route path="*" element={<NotFoundPage />} />
 					</Route>

@@ -1,12 +1,19 @@
 import React from 'react'
-import { Small } from '../components/ChangeCase'
+import { Large, Small } from '../components/ChangeCase'
+export default function RestAPI(p) {
 
-function RestApi(props) {
-	// const name = Large(props.item.ans)
-	const slug = Small(props.item.ans)
+	const list = Object.values(p.formData)
+
 	return (
-		<div>
-			{`function rest_api_select_${slug}(WP_REST_Request $request){
+		<>
+			<h2>WordPress Rest API</h2>
+			<pre>{`<?php`}
+				{list.map((item) => {
+					const slug = Small(item.value)
+					return (
+						<>
+							{`
+function rest_api_select_${slug}(WP_REST_Request $request){
 	// do something here
 	$result = array("sample" => "output");
 	echo json_encode($result, JSON_PRETTY_PRINT);
@@ -22,9 +29,15 @@ add_action('rest_api_init', function () {
 	);
 });
 // URL: https://yourwebsite.com/wp-json/my_api/v1/${slug}/
-	`}
-		</div>
+`}
+						</>
+					)
+				})}
+				{`?>`}
+			</pre>
+			<p>Not e: After adding this code, please save permalinks once...</p>
+
+		</>
 	)
 }
 
-export default RestApi

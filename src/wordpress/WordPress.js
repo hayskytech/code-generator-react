@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
-import Router from './Router';
-import InputForm from './InputForm';
+import InputForm from '../react/InputForm';
+import CustomTaxonomy from './CustomTaxonomy'
+import CustomPostType from './CustomPostType'
+import RestAPI from './RestAPI'
+import AdminMenu from './AdminMenu';
 
 export default function ReactGen() {
 
@@ -12,13 +15,13 @@ export default function ReactGen() {
 		element.classList.add("active")
 		setPage(element.innerHTML)
 	}
-	const submenu = ['Router']
-	const [page, setPage] = useState('Router')
+	const submenu = ['Custom Post Type', 'Custom Taxonomy', 'REST API', 'Admin Menu']
+	const [page, setPage] = useState('Custom Post Type')
 
 	function handleSubmit(e) {
 		e.preventDefault()
 	}
-	const [formData, setFormData] = useState({ "a0": { "value": "" } })
+	const [formData, setFormData] = useState({ "a0": { "value": "hello" } })
 	return (
 		<div className="container my-2">
 			<div className="container">
@@ -32,13 +35,18 @@ export default function ReactGen() {
 					</ul>
 				</header>
 			</div>
-			<h1>React Generator</h1>
+			<h1>WordPress Generator</h1>
 			<form onSubmit={handleSubmit}>
 				<InputForm setFormData={setFormData} formData={formData} />
 			</form>
 
-			{page === "Router" && <Router formData={formData} />}
+			{page === "Custom Post Type" && <CustomPostType formData={formData} />}
 
+			{page === "Custom Taxonomy" && <CustomTaxonomy formData={formData} />}
+
+			{page === "REST API" && <RestAPI formData={formData} />}
+
+			{page === "Admin Menu" && <AdminMenu formData={formData} />}
 
 		</div>
 	)

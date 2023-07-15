@@ -1,14 +1,20 @@
 import React from 'react'
 import { Large, Small } from '../components/ChangeCase'
+function CPT(p) {
 
-export function CustomTaxonomy(props) {
-	const name = Large(props.item.ans)
-	const slug = Small(props.item.ans)
+	const list = Object.values(p.formData)
+
 	return (
 		<div>
-			{`<?php
+			<h2>WordPress Custom Taxonomy</h2>
+			{(
+				<pre>{list.map((item) => {
+					const name = Large(item.value)
+					return (
+						<>
+							{`<?php
 add_action( "init",function(){
-    // Set labels for ${props.item.ans}
+    // Set labels for ${name}
     $labels = array(
         "name" => "${name}s",
         "singular_name" => "${name}",
@@ -20,21 +26,29 @@ add_action( "init",function(){
         "view_item" => "View ${name}",
         "search_items" => "Search ${name}s",
     );
-    // Set Options for ${props.item.ans}
+    // Set Options for ${name}
     $args = array(    
-        "labels"      => $labels,
-        "hierarchical"               => true,
-        "public"                     => true,
-        "show_ui"                    => true,
-        "show_admin_column"          => true,
-        "show_in_nav_menus"          => true,
-        "show_tagcloud"              => true,
-        "show_in_rest"               => true,
-    );
-    register_taxonomy("${slug}", array("post"), $args);
+			"labels"      => $labels,
+			"hierarchical"               => true,
+			"public"                     => true,
+			"show_ui"                    => true,
+			"show_admin_column"          => true,
+			"show_in_nav_menus"          => true,
+			"show_tagcloud"              => true,
+			"show_in_rest"               => true,
+	);
+	register_taxonomy("${Small(item.value)}", array("post"), $args);
     
 });
 ?>`}
+						</>
+					)
+				})
+				}</pre>
+			)}
+
 		</div>
 	)
 }
+
+export default CPT

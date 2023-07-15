@@ -2,12 +2,8 @@ import './CodeGen.scss'
 import React, {useState} from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import { HtmlInput, HtmlSelect, HtmlRadio, FormatHtml } from './Html';
-import Cpt from '../wordpress/CustomPostType';
 import { Large, Small } from './ChangeCase';
-import { CustomTaxonomy } from '../wordpress/CustomTaxonomy';
 import HtmlInputs from './HtmlInputs';
-import RestApi from '../wordpress/RestApi';
-import AdminMenu from '../wordpress/AdminMenu';
 
 const td_hide = ['submit', 'checkbox', 'hidden', 'button', 'reset']
 const dropdown = ['select', 'radio']
@@ -21,7 +17,7 @@ export default function CodeGen() {
 		element.classList.add("active")
 		setPage(element.innerHTML)
 	}
-	const submenu = ['HTML Form', 'Custom Post Type', 'Custom Taxonomy', 'Rest API', 'Admin Menu']
+	const submenu = ['HTML Form']
 	const [page, setPage] = useState('HTML Form')
 
 	const [htmlCode, setHtmlCode] = React.useState('');
@@ -187,29 +183,6 @@ export default function CodeGen() {
 						<pre>{htmlCode.substring(0, htmlCode.length - 2)}</pre>
 					)}
 
-					{Boolean(list.length) && page === 'Custom Post Type' && (
-						<pre>{list.map((item) => (<Cpt key={item.key} item={item} />))}</pre>
-					)}
-
-					{Boolean(list.length) && page === 'Custom Taxonomy' && <pre>
-						{list.map((item) => (<CustomTaxonomy key={item.key} item={item} />))}
-					</pre>}
-
-					{Boolean(list.length) && page === 'Rest API' &&
-						<div>
-							<pre>{`<?php`}
-								{list.map((item) => (<RestApi key={item.key} item={item} />))}
-								{`?>`}</pre>
-							<p>Note: After adding this code, please save permalinks once...</p>
-						</div>}
-
-					{Boolean(list.length) && page === 'Admin Menu' &&
-						<div>
-							<pre>{`<?php
-add_action('admin_menu' , function(){`}
-								{list.map((item) => (<AdminMenu key={item.key} item={item} />))}
-								{`});`}</pre>
-						</div>}
 
 				</div>
 			</div>

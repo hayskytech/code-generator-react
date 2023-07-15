@@ -1,11 +1,18 @@
 import React from 'react'
 import { Large, Small } from '../components/ChangeCase'
-function Cpt(props) {
-	const name = Large(props.item.ans)
-	const slug = Small(props.item.ans)
+function CustomPostType(p) {
+
+	const list = Object.values(p.formData)
+
 	return (
 		<div>
-			{`<?php
+			<h2>WordPress Custom Post type</h2>
+			{(
+				<pre>{list.map((item) => {
+					const name = Large(item.value)
+					return (
+						<>
+							{`<?php
 add_action( "init",function(){
     // Set labels for ${name}
     $labels = array(
@@ -31,12 +38,18 @@ add_action( "init",function(){
         "publicly_queryable"  => true,
         "exclude_from_search" => false
     );
-    register_post_type("${slug}", $args);
+    register_post_type("${Small(item.value)}", $args);
     
 });
 ?>`}
+						</>
+					)
+				})
+				}</pre>
+			)}
+
 		</div>
 	)
 }
 
-export default Cpt
+export default CustomPostType

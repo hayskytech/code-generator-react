@@ -11,7 +11,7 @@ export default function Router(p) {
 			<pre>
 				{`<BrowserRouter>
 	<Routes>
-		<Route path="sub" element={<NavBar/>}>`}
+		<Route path="" element={<NavBar/>}>`}
 				{list.map((item, index) => (
 					<>{
 						`
