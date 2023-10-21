@@ -1,52 +1,111 @@
 import './App.css';
-import React from 'react'
+import 'semantic-ui-css/semantic.min.css'
+import React, { createContext, useState } from 'react'
 import { BrowserRouter, Route, Routes, Outlet, Link } from 'react-router-dom'
 import CodeGen from './components/CodeGen';
-import ReactGen from './react/ReactGen';
-import WordPress from './wordpress/WordPress';
 import NotFoundPage from './components/NotFoundPage';
 import Testing from './components/Testing';
+import { Container, Icon, Menu } from 'semantic-ui-react';
+import Router from './react/Router';
+import WPList from './react/WPList';
+import DirectWP from './react/DirectWP';
+import CustomPostType from './wordpress/CustomPostType';
+import CustomTaxonomy from './wordpress/CustomTaxonomy';
+import RestAPI from './wordpress/RestAPI';
+import AdminMenu from './wordpress/AdminMenu';
+
+export const FormData = createContext(null)
+export const SetFormData = createContext(null)
 
 export default function App() {
+  const [formData, setFormData] = useState({ "a0": { "value": "" } })
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="" element={<NavBar />}>
-            <Route path='html' element={<CodeGen />} />
-            <Route path="reactgen" element={<ReactGen />} />
-            <Route path="" element={<WordPress />} />
-            <Route path="testing" element={<Testing />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </>
+    <Container>
+      <FormData.Provider value={formData}>
+        <SetFormData.Provider value={setFormData}>
+          <BrowserRouter>
+            <Routes>
+              <Route path="code-generator" element={<NavBar />}>
+                <Route index element={<CodeGen />} />
+
+                <Route path='wordpress' element={<SmallMenu items={['Custom Post Type', 'Custom Taxonomy', 'REST API', 'Admin-Menu']} />} >
+                  <Route index element={<CustomPostType />} />
+                  <Route path='Custom Post Type' element={<CustomPostType />} />
+                  <Route path='Custom Taxonomy' element={<CustomTaxonomy />} />
+                  <Route path='REST API' element={<RestAPI />} />
+                  <Route path='Admin-Menu' element={<AdminMenu />} />
+                </Route>
+
+                <Route path="react" element={<SmallMenu items={['Router', 'WP List']} />}>
+                  <Route index element={<Router formData={formData} setFormData={setFormData} />} />
+                  <Route path='Router' element={<Router />} />
+                  <Route path='WP List' element={<WPList />} />
+                  <Route path='Direct WP' element={<DirectWP formData={formData} setFormData={setFormData} />} />
+                </Route>
+                <Route path="testing" element={<Testing />} />
+                <Route path="*" element={<NotFoundPage />} />
+                <Route path='html'>
+                  <Route index element={<CodeGen />} />
+                </Route>
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </SetFormData.Provider>
+      </FormData.Provider>
+    </Container>
   );
 }
 
+function SmallMenu(p) {
+  const [item, setitem] = useState('')
+  function handleItemClick(e, { name }) { setitem(name) }
+  return (<>
+    <Menu>
+      {p.items.map((x, i) =>
+        <Menu.Item
+          name={x}
+          active={item === x}
+          content={x}
+          onClick={handleItemClick}
+          as={Link}
+          to={x}
+        />
+      )}
+    </Menu>
+    <Outlet />
+  </>)
+}
+
 function NavBar() {
+  const [item, setitem] = useState('html')
+  function handleItemClick(e, { name }) { setitem(name) }
+  let items = [
+    { slug: 'html', icon: 'code' },
+    { slug: 'react', icon: 'react' },
+    { slug: 'wordpress', icon: 'wordpress' },
+  ]
+  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+    items.push({ slug: 'testing', icon: 'tasks' })
+  }
   return (
-    <main>
-      <nav className="navbar navbar-expand-lg bg-body-tertiary">
-        <div className="container-fluid">
-          <Link className="navbar-brand" to="/">Haysky Code Generator</Link>
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item"><Link className="nav-link" to="/">WordPress</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/html">HTML Form</Link></li>
-              <li className="nav-item"><Link className="nav-link" to="/reactgen">React JS</Link></li>
-              {(!process.env.NODE_ENV || process.env.NODE_ENV === 'development') &&
-                <li className="nav-item"><Link className="nav-link" to="/testing">Testing</Link></li>
-              }
-            </ul>
-          </div>
-        </div>
-      </nav>
+    <>
+      <Menu icon='labeled'>
+        {
+          items.map((x, i) =>
+            <Menu.Item
+              key={i}
+              name={x.slug}
+              active={item === x.slug}
+              onClick={handleItemClick}
+              as={Link}
+              to={x.slug}
+            >
+              <Icon name={x.icon} /> {x.slug}
+            </Menu.Item>
+          )
+        }
+      </Menu>
       <Outlet />
-    </main >
+    </>
   )
 }

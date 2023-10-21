@@ -1,11 +1,17 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Large, Small } from '../components/ChangeCase'
-function CustomPostType(p) {
+import { FormData, SetFormData } from '../App'
+import InputForm from '../react/InputForm'
+import { Container } from 'semantic-ui-react'
 
-	const list = Object.values(p.formData)
+function CustomPostType() {
+  const formData = useContext(FormData)
+  const setFormData = useContext(SetFormData)
+	const list = Object.values(formData)
 
 	return (
-		<div>
+		<Container>
+      <InputForm setFormData={setFormData} formData={formData} />
 			<h2>WordPress Custom Post type</h2>
 			{(
 				<pre>{list.map((item, index) => {
@@ -48,7 +54,7 @@ add_action( "init",function(){
 				}</pre>
 			)}
 
-		</div>
+		</Container>
 	)
 }
 

@@ -1,11 +1,17 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Small } from '../components/ChangeCase'
+import { FormData, SetFormData } from '../App'
+import InputForm from '../react/InputForm'
+import { Container } from 'semantic-ui-react'
 
-export default function AdminMenu(p) {
-	const list = Object.values(p.formData)
+export default function AdminMenu() {
+  const formData = useContext(FormData)
+  const setFormData = useContext(SetFormData)
+	const list = Object.values(formData)
 
 	return (
-		<div>
+		<Container>
+      <InputForm setFormData={setFormData} formData={formData} />
 			<h2>WordPress Admin Menu</h2>
 			<pre>{`<?php
 add_action('admin_menu' , function(){`}
@@ -36,7 +42,7 @@ add_action('admin_menu' , function(){`}
 				})}
 				{`});`}</pre>
 
-		</div>
+		</Container>
 	)
 }
 

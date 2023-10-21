@@ -1,15 +1,21 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { FormData, SetFormData } from '../App'
+import InputForm from './InputForm'
+import { Container } from 'semantic-ui-react'
 
-export default function WPList(p) {
+export default function WPList() {
+  const formData = useContext(FormData)
+  const setFormData = useContext(SetFormData)
   let arr = []
-  Object.values(p.formData).forEach(e => {
+  Object.values(formData).forEach(e => {
     if (e.value) { arr.push(e.value) }
   })
   if (arr.length === 0) {
     arr.push('title')
   }
   return (
-    <>
+    <Container>
+      <InputForm setFormData={setFormData} formData={formData} />
       <h2>WP List</h2>
       <h3>Imports</h3>
       <pre>
@@ -53,6 +59,6 @@ return (
           )
         })} */}
       </pre>
-    </>
+    </Container>
   )
 }

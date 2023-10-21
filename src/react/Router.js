@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Large, Small } from '../components/ChangeCase'
+import InputForm from './InputForm'
+import { Container } from 'semantic-ui-react'
+import { FormData, SetFormData } from '../App'
 
-export default function Router(p) {
-
-  const list = Object.values(p.formData)
+export default function Router() {
+  const formData = useContext(FormData)
+  const setFormData = useContext(SetFormData)
+  const list = Object.values(formData)
   return (
-    <>
+    <Container>
+      <InputForm setFormData={setFormData} formData={formData} />
       <br />
       <h2>Router Pages</h2>
       <pre>
@@ -26,6 +31,6 @@ export default function Router(p) {
 </BrowserRouter>`}
       </pre>
       <p>Create components for each page.</p>
-    </>
+    </Container>
   )
 }
