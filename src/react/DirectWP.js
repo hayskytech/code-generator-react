@@ -5,7 +5,7 @@ export default function DirectWP() {
   const [acf, setacf] = useState([])
   const [bcf, setbcf] = useState([])
   const [fields, setfields] = useState([])
-  const url = 'https://ahes.in/wp-json/wp/v2/'
+  const url = JSON.parse(localStorage.getItem('settings')).wp_url + 'wp-json/wp/v2/'
   const [data, setdata] = useState(null)
   const [list, setlist] = useState([])
   useEffect(() => {
