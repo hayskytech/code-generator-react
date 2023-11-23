@@ -2,11 +2,12 @@ import React, { useContext } from 'react'
 import { Large, Small } from '../components/ChangeCase'
 import InputForm from './InputForm'
 import { Container } from 'semantic-ui-react'
-import { FormData, SetFormData } from '../App'
+import { FormDataContext } from '../App'
 
 export default function Router() {
-  const formData = useContext(FormData)
-  const setFormData = useContext(SetFormData)
+  const { formData } = useContext(FormDataContext)
+  const { setFormData } = useContext(FormDataContext)
+  
   const list = Object.values(formData)
   return (
     <Container>

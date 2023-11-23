@@ -1,12 +1,13 @@
 import React, { useContext } from 'react'
 import { Large, Small } from '../components/ChangeCase'
-import { FormData, SetFormData } from '../App'
+import { FormDataContext } from '../App'
 import InputForm from '../react/InputForm'
 import { Container } from 'semantic-ui-react'
 
 function CustomPostType() {
-  const formData = useContext(FormData)
-  const setFormData = useContext(SetFormData)
+  const {formData} = useContext(FormDataContext)
+  const {setFormData} = useContext(FormDataContext)
+  
 	const list = Object.values(formData)
 
 	return (

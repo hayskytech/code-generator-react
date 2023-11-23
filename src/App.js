@@ -17,71 +17,70 @@ import Settings from './components/Settings';
 import Template from './wordpress/Template';
 import ACF_Fields from './wordpress/ACF_Fields';
 import ACF_PostTypes from './wordpress/ACF_PostTypes';
+import Basics from './htmlcss/Basics';
 
-export const FormData = createContext(null)
-export const SetFormData = createContext(null)
+export const FormDataContext = createContext(null)
 
 export default function App() {
   const [formData, setFormData] = useState({ "a0": { "value": "" } })
   return (
     <Container>
-      <FormData.Provider value={formData}>
-        <SetFormData.Provider value={setFormData}>
-          <BrowserRouter>
-            <Routes>
-              <Route path="code-generator" element={<NavBar />}>
-                <Route index element={<CodeGen />} />
+      <FormDataContext.Provider value={{ formData, setFormData }}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="code-generator" element={<NavBar />}>
+              <Route index element={<CodeGen />} />
 
-                <Route path='wordpress' element={<SmallMenu items={['Custom Post Type', 'Custom Taxonomy', 'REST API', 'Admin-Menu', 'Template', 'ACF Fields','ACF Post Type']} />} >
-                  <Route index element={<CustomPostType />} />
-                  <Route path='Custom Post Type' element={<CustomPostType />} />
-                  <Route path='Custom Taxonomy' element={<CustomTaxonomy />} />
-                  <Route path='REST API' element={<RestAPI />} />
-                  <Route path='Admin-Menu' element={<AdminMenu />} />
-                  <Route path='Template' element={<Template />} />
-                  <Route path='ACF Fields' element={<ACF_Fields />} />
-                  <Route path='ACF Post Type' element={<ACF_PostTypes />} />
-                </Route>
-
-                <Route path="react" element={<SmallMenu items={['Router', 'WP List']} />}>
-                  <Route index element={<Router formData={formData} setFormData={setFormData} />} />
-                  <Route path='Router' element={<Router />} />
-                  <Route path='WP List' element={<WPList />} />
-                  <Route path='Direct WP' element={<DirectWP formData={formData} setFormData={setFormData} />} />
-                </Route>
-
-                <Route path='html'>
-                  <Route index element={<CodeGen />} />
-                </Route>
-
-                <Route path="settings" element={<Settings />} />
-                <Route path="testing" element={<Testing />} />
-                <Route path="*" element={<NotFoundPage />} />
+              <Route path='wordpress' element={<SubMenu items={['Custom Post Type', 'Custom Taxonomy', 'REST API', 'Admin-Menu', 'Template', 'ACF Fields', 'ACF Post Type']} />} >
+                <Route index element={<CustomPostType />} />
+                <Route path='Custom Post Type' element={<CustomPostType />} />
+                <Route path='Custom Taxonomy' element={<CustomTaxonomy />} />
+                <Route path='REST API' element={<RestAPI />} />
+                <Route path='Admin-Menu' element={<AdminMenu />} />
+                <Route path='Template' element={<Template />} />
+                <Route path='ACF Fields' element={<ACF_Fields />} />
+                <Route path='ACF Post Type' element={<ACF_PostTypes />} />
               </Route>
-            </Routes>
-          </BrowserRouter>
-        </SetFormData.Provider>
-      </FormData.Provider>
+
+              <Route path="react" element={<SubMenu items={['Router', 'WP List', 'OTP Login']} />}>
+                <Route index element={<Router />} />
+                <Route path='Router' element={<Router />} />
+                <Route path='WP List' element={<WPList />} />
+                <Route path='Direct WP' element={<DirectWP />} />
+                <Route path='OTP Login' element={<DirectWP />} />
+              </Route>
+
+              <Route path='html' element={<SubMenu items={['Basics']} />}>
+                <Route index element={<CodeGen />} />
+                <Route path='basics' element={<Basics />} />
+              </Route>
+
+              <Route path="settings" element={<Settings />} />
+              <Route path="testing" element={<Testing />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </FormDataContext.Provider>
     </Container>
   );
 }
 
-function SmallMenu(p) {
+function SubMenu(p) {
   const [item, setitem] = useState('')
   function handleItemClick(e, { name }) { setitem(name) }
   return (<>
-    <hr />
-      {p.items.map((x, i) =>
-        <Button
-          name={x}
-          active={item === x}
-          content={x}
-          onClick={handleItemClick}
-          as={Link}
-          to={x}
-          color='teal'
-        />
-      )}
+    {p.items.map((x, i) =>
+      <Button
+        name={x}
+        active={item === x}
+        content={x}
+        onClick={handleItemClick}
+        as={Link}
+        to={x}
+        color='teal'
+      />
+    )}
     <hr />
     <Outlet />
   </>)
@@ -98,7 +97,7 @@ function NavBar() {
   ]
   if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     // items.push({ slug: 'python', icon: 'python' })
-    // items.push({ slug: 'testing', icon: 'tasks' })
+    items.push({ slug: 'testing', icon: 'tasks' })
   }
   return (
     <>
@@ -112,12 +111,14 @@ function NavBar() {
               onClick={handleItemClick}
               as={Link}
               to={x.slug}
+              color={item === x.slug && 'teal'}
             >
               <Icon name={x.icon} size='small' /> {x.slug}
             </Menu.Item>
           )
         }
       </Menu>
+      <hr />
       <Outlet />
     </>
   )

@@ -1,11 +1,12 @@
 import React, { useContext } from 'react'
-import { FormData, SetFormData } from '../App'
+import { FormDataContext } from '../App'
 import InputForm from './InputForm'
 import { Container } from 'semantic-ui-react'
 
 export default function WPList() {
-  const formData = useContext(FormData)
-  const setFormData = useContext(SetFormData)
+  const { formData } = useContext(FormDataContext)
+  const { setFormData } = useContext(FormDataContext)
+
   let arr = []
   Object.values(formData).forEach(e => {
     if (e.value) { arr.push(e.value) }

@@ -1,11 +1,12 @@
 import React, { useContext } from 'react'
-import { FormData, SetFormData } from '../App'
+import { FormDataContext } from '../App'
 import InputForm from '../react/InputForm'
 import { Large, Small } from '../components/ChangeCase'
 
 export default function Template() {
-  const formData = useContext(FormData)
-  const setFormData = useContext(SetFormData)
+  const {formData} = useContext(FormDataContext)
+  const {setFormData} = useContext(FormDataContext)
+
   const list = Object.values(formData)
   return (
     <div>
